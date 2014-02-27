@@ -10,10 +10,10 @@
 
 #include <stdint.h>
 #include <cstdlib>
+#include "page_size.h"
 
 namespace BPlusTree{
 
-static int const PAGE_SIZE = 4096;
 
 typedef uint32_t p_offset; // use 32bit to represent page offset in a file
 

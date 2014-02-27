@@ -7,6 +7,8 @@
 
 #include <cassert>
 #include <cstdio>
+#include "file_helper.h"
+#include <stdexcept>
 
 namespace BPlusTree{
 
@@ -15,7 +17,7 @@ file_helper::file_helper(FILE* f) : file(f) {
 		throw std::runtime_error("file_helper: constructor receive null file ptr.");
 
 	move_cursor(0);
-	read_page_block(0, dir.page_block());	// Init dir_page
+	//read_page_block(0, dir.page_block());	// Init dir_page
 }
 
 void file_helper::move_cursor(size_t offset) {	// Calling fseek to move file pointer

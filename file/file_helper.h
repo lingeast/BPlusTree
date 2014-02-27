@@ -9,7 +9,9 @@
 #define FILE_HELPER_H_
 
 #include <cstdio>
-#include "page/page.h"
+#include <cstdlib>
+#include "../page/page_size.h"
+
 namespace BPlusTree{
 /*
  * class file_helper handles read/write page with a give page number
@@ -18,10 +20,10 @@ namespace BPlusTree{
 class file_helper {
 private:
 	FILE* file;
-	dir_page dir;
-	void file_helper::move_cursor(size_t offset);
-	void file_helper::read_page_block(size_t offset, void* data);
-	void file_helper::write_page_block(size_t offset, const void *data);
+	//dir_page dir;
+	void move_cursor(size_t offset);
+	void read_page_block(size_t offset, void* data);
+	void write_page_block(size_t offset, const void *data);
 
 public:
 	file_helper(FILE* f);	// keeps a FILE* ptr
