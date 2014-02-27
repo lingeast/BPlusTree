@@ -11,10 +11,13 @@
 #include "serializable.h"
 #include "comparable.h"
 
+namespace BPlusTree{
+
 class bt_key : serializable, comparable {
 
 };
 
+}
 
 
 #endif /* BTKEY_H_ */

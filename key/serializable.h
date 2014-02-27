@@ -8,6 +8,8 @@
 #ifndef WRITABLE_H_
 #define WRITABLE_H_
 
+namespace BPlusTree{
+
 class serializable {
 public:
 	// memcpyable : memcpy(dst, serialzable_ptr->data(), serialzable_ptr->len());
@@ -21,6 +23,8 @@ public:
 
 };
 
+
+}
 
 
 #endif /* WRITABLE_H_ */

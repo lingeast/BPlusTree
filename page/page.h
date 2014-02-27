@@ -11,7 +11,11 @@
 #include <stdint.h>
 #include <cstdlib>
 
-#define PAGE_SIZE 4096
+namespace BPlusTree{
+
+static int const PAGE_SIZE = 4096;
+
+typedef uint32_t p_offset; // use 32bit to represent page offset in a file
 
 class page_node {
 private:
@@ -25,7 +29,8 @@ private:
 	const char* content;
 public:
 	page_node();
-	void* data_block() const {return (void*) content;}
+	void* content_block() const {return (void*) content;}
+	void* page_block() const {return (void*) page;}
 	bool is_leaf_node() const {return *is_leaf == 0;}
 	// Pass reference to outside
 	uint16_t& left_id() {return *left;}
@@ -40,7 +45,11 @@ class dir_page {
 private:
 	char page[PAGE_SIZE];
 public:
-	int addr(int slot) {return *((uint32_t*) page + slot);}
+	dir_page() {} // do nothing
+	void* page_block() const {return (void*) page;} // expose the page block to outside
+	p_offset& operator[](int slot) const;
+	int addr(int slot) {return operator[](slot);}
 };
 
+}
 #endif /* PAGE_H_ */

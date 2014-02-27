@@ -8,6 +8,8 @@
 #ifndef COMPARABLE_H_
 #define COMPARABLE_H_
 
+namespace BPlusTree{
+
 class comparable {
 public:
 	virtual bool operator<(const comparable &) = 0;
@@ -15,5 +17,6 @@ public:
 	virtual ~comparable();
 };
 
+}
 
 #endif /* COMPARABLE_H_ */
