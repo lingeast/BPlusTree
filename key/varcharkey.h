@@ -13,14 +13,17 @@
 
 using std::string;
 using namespace BPlusTree;
-
+/*
+ * raw_data structure:
+ * | 4-byte len | string data |
+ */
 class varchar_key : public bt_key {
 private:
 	char* raw_data;
 	int len;
 	string str;
 public:
-	size_t length();
+	size_t length() const;
 	void* data() const ;
 
 	// load from memory, serialzable_ptr->load(ptr_to_position);

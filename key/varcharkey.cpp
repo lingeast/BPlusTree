@@ -13,12 +13,12 @@ varchar_key::~varchar_key() {
 	if (raw_data != NULL)
 		delete raw_data;
 }
-size_t varchar_key::length(){
-	return 1;
+size_t varchar_key::length() const {
+	return len;
 }
 
 void* varchar_key::data() const {
-	return NULL;
+	return (void*) raw_data;
 }
 
 	// load from memory, serialzable_ptr->load(ptr_to_position);
