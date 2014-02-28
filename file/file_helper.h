@@ -22,12 +22,15 @@ private:
 	FILE* file;
 	//dir_page dir;
 	void move_cursor(size_t offset);
-	void read_page_block(size_t offset, void* data);
+	void read_page_block(size_t offset, void * data);
 	void write_page_block(size_t offset, const void *data);
 
 public:
+	file_helper(): file(NULL) {}
 	file_helper(FILE* f);	// keeps a FILE* ptr
 	~file_helper() {;} // do nothing
+	void read_page(unsigned int slot, void * data);
+	void write_page(unsigned int slot, const void * data);
 };
 }
 

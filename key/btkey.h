@@ -13,7 +13,14 @@
 
 namespace BPlusTree{
 
-class bt_key : serializable, comparable {
+class bt_key : public serializable, public comparable {
+	/*
+	 * Other requirement on bt_key:
+	 * 1. It should have deep-copy copy constructor
+	 */
+public:
+	//virtual ~comparable() = 0;
+	//virtual ~serializable() = 0;
 
 };
 

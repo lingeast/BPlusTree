@@ -20,6 +20,20 @@ file_helper::file_helper(FILE* f) : file(f) {
 	//read_page_block(0, dir.page_block());	// Init dir_page
 }
 
+void file_helper::read_page(unsigned int slot, void * data) {
+	if ( slot >= PAGE_SIZE / sizeof(p_offset)) {
+		throw std::out_of_range("file_helper: Receive slot num out of boundary");
+	}
+	read_page_block(slot * PAGE_SIZE, data);
+}
+
+void file_helper::write_page(unsigned int slot, const void* data) {
+	if ( slot >= PAGE_SIZE / sizeof(p_offset)) {
+		throw std::out_of_range("file_helper: Receive slot num out of boundary");
+	}
+	write_page_block(slot * PAGE_SIZE, data);
+}
+
 void file_helper::move_cursor(size_t offset) {	// Calling fseek to move file pointer
 	assert (file != NULL);
 	if (fseek(file, offset, SEEK_SET) != 0)

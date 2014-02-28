@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "bptree.h"
-
+#include "key/varcharkey.h"
 using std::cout;
 using std::endl;
 
