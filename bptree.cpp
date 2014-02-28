@@ -10,7 +10,7 @@
 
 namespace BPlusTree{
 
-bp_tree::bp_tree(const char *name) : fName(name), file(NULL), fhelp(NULL) {
+bp_tree::bp_tree(const char *name, bt_key* itr) : fName(name), file(NULL), fhelp(NULL), key_itr(itr) {
 	file = fopen(name, "r+b");
 	if (file == NULL) {
 		// Creating new btree file
@@ -44,7 +44,8 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, serializable* rid) {
 		// if splitting happen return a key ptr
 		// else return NULL ptr
 	} else {
-		// going through index node
+		// find next page, read it out
+		// insert_to_page(child_pg, key, rid);
 		// if splitting happen return a key ptr
 		// else return NULL ptr
 	}
