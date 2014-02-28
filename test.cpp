@@ -13,9 +13,14 @@ using std::endl;
 
 using BPlusTree::bp_tree;
 
+void testKey(bt_key* key) {
+	cout << key->to_string() << endl;
+}
 int main() {
-	BPlusTree::bp_tree indexTree("my_name");
+	//BPlusTree::bp_tree indexTree("my_name");
 	cout << "Hello B+ Tree" << endl;
+	varchar_key* key = new varchar_key();
+	testKey(key);
 }
 
 

@@ -14,7 +14,7 @@ class comparable {
 public:
 	virtual bool operator<(const comparable &) = 0;
 	virtual bool operator==(const comparable &) = 0;
-	virtual ~comparable() = 0;
+	virtual ~comparable(){}; // do nothing
 };
 
 }

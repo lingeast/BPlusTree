@@ -19,9 +19,6 @@ class bt_key : public serializable, public comparable {
 	 * 1. It should have deep-copy copy constructor
 	 */
 public:
-	//virtual ~comparable() = 0;
-	//virtual ~serializable() = 0;
-
 };
 
 }
