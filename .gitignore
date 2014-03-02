@@ -1,0 +1,12 @@
+
+Debug/file/subdir.mk
+
+*.o
+
+*.d
+
+*.mk
+
+Debug/makefile
+
+Debug/BTree

@@ -18,6 +18,12 @@ using std::string;
 
 namespace BPlusTree{
 
+typedef struct
+{
+  unsigned pageNum;
+  unsigned slotNum;
+} bpRID;
+
 class bp_tree {
 private:
 	string fName;
@@ -25,14 +31,14 @@ private:
 	file_helper* fhelp;
 	bt_key* key_itr;
 	dir_page dir;
-	bt_key* insert_to_page(page_node& pg, bt_key* key, serializable* rid);
+	bt_key* insert_to_page(page_node& pg, bt_key* key, bpRID* rid);
 public:
 	bp_tree(const char *name, bt_key* itr);
 	~bp_tree();
 
-	void insert_entry(bt_key* key, serializable* rid);
+	void insert_entry(bt_key* key, bpRID* rid);
 
-	void delete_entry(bt_key* key, serializable* rid);
+	void delete_entry(bt_key* key, bpRID* rid);
 };
 
 
