@@ -40,6 +40,14 @@ void page_node::insert(bt_key* key, serializable* rid, bt_key* itr) {
 	else insert_to_index(key, rid, itr);
 }
 
+int page_node::findEntry(bt_key* key){
+	return 0;
+}
+
+int page_node::findHalf(bt_key* key,int &flag){
+	return 0;
+}
+
 dir_page::dir_page() {
 	memset(&page, 0, sizeof(page));
 }

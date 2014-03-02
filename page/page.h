@@ -53,6 +53,8 @@ public:
 	 * Only called when key is definitely to be stored in the page (right page, enough room)
 	 */
 	void insert(bt_key* key, serializable* rid, bt_key* itr);
+	int findEntry(bt_key* key);
+	int findHalf(bt_key* key,int &flag);
 };
 
 /*
