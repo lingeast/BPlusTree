@@ -1,25 +1,25 @@
 /*
- * intkey.h
+ * floatkey.h
  *
  *  Created on: Mar 1, 2014
  *      Author: yidong
  */
 
-#ifndef INTKEY_H_
-#define INTKEY_H_
+#ifndef FLOATKEY_H_
+#define FLOATKEY_H_
 
 #include "btkey.h"
 #include <stdint.h>
 
-typedef int32_t int_key_t;
+typedef int32_t float_key_t;
 
-class int_key: public BPlusTree::bt_key {
+class float_key: public BPlusTree::bt_key {
 private:
-	int_key_t val;
 	size_t len;
+	float_key_t val;
 public:
-	int_key();
-	virtual ~int_key();
+	float_key();
+	virtual ~float_key();
 
 	size_t length() const {return len;}
 	const void * data() const {return &val;}
@@ -29,12 +29,11 @@ public:
 	// Used for debug
 	std::string to_string() const;
 
-	//bool operator<(const int_key &that) {return val < that.val;}
-	//bool operator==(const int_key &that) {return val == that.val;}
+	bool operator<(const float_key &that);
+	bool operator==(const float_key &that);
 
 	bool operator<(const comparable &rhs);
 	bool operator==(const comparable &rhs);
-
 };
 
-#endif /* INTKEY_H_ */
+#endif /* FLOATKEY_H_ */

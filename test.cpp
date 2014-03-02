@@ -9,6 +9,7 @@
 #include "bptree.h"
 #include "key/varcharkey.h"
 #include "key/intkey.h"
+#include "key/floatkey.h"
 #include <cstring>
 
 using std::cout;
@@ -65,6 +66,15 @@ int main() {
 	testCompKey(ik2, ik1);
 	memcpy(&val1, ik2->data(), ik2->length());
 	cout << "After Swap: val1 = " << val1 << endl;
+
+	float f1 = 19.442;
+	float f2 = 2839.8;
+
+	float_key* fk1 = new float_key();
+	float_key* fk2 = new float_key();
+	fk1->load(&f1);
+	fk2->load(&f2);
+	testCompKey(fk2, fk1);
 }
 
 
