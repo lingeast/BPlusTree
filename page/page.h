@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include "page_size.h"
 #include "../key/btkey.h"
+#include "../rid/rid.h"
 
 namespace BPlusTree{
 
@@ -32,9 +33,9 @@ private:
 	//uint16_t* parent;	// page id of parent
 	uint16_t * end;		// the end offset of content to the start of content
 	char * content;
-	void insert_to_index(bt_key* key, bpRID* rid, bt_key* itr);
-	void insert_to_leaf(bt_key* key, bpRID* rid, bt_key* itr);
-	int find_leaf_Half(bt_key* key, bpRID* rid,int &flag, bt_key* itr);
+	void insert_to_index(bt_key* key, RID rid, bt_key* itr);
+	void insert_to_leaf(bt_key* key, RID rid, bt_key* itr);
+	int find_leaf_Half(bt_key* key, RID rid, int &flag, bt_key* itr);
 	int find_index_Half(bt_key* key, int &flag, bt_key* itr);
 public:
 	page_node(int id);	// to be used to load existing page node from file
@@ -54,9 +55,9 @@ public:
 	 * Insert <key, rid> pair to page
 	 * Only called when key is definitely to be stored in the page (right page, enough room)
 	 */
-	void insert(bt_key* key, bpRID* rid, bt_key* itr);
+	void insert(bt_key* key, RID rid, bt_key* itr);
 	int findEntry(bt_key* key, bt_key *itr);
-	int findHalf(bt_key* key,bpRID *rid,int &flag, bt_key *itr);
+	int findHalf(bt_key* key, RID rid,int &flag, bt_key *itr);
 };
 
 /*

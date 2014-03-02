@@ -7,6 +7,7 @@
 
 #include "bptree.h"
 #include <stdexcept>
+#include <cstring>
 
 namespace BPlusTree{
 
@@ -33,12 +34,12 @@ bp_tree::~bp_tree() {
 	if (fhelp != NULL) delete fhelp;
 }
 
-void bp_tree::insert_entry(bt_key *key, bpRID *rid) {
+void bp_tree::insert_entry(bt_key *key, RID rid) {
 
 	//insert_to_page
 }
 
-bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, bpRID* rid) {
+bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 	if (pg.is_leaf_node()) {
 		if (key->length() + sizeof(rid) <= PAGE_SIZE - pg.end_offset()){
 			pg.insert(key,rid,key_itr);
@@ -52,7 +53,7 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, bpRID* rid) {
 				}
 			}
 			dir[splitpage] = splitpage;
-			page_node splitpg(NodeType::Leaf,splitpage,pg.page_id(),pg.right_id());
+			page_node splitpg(Leaf, splitpage, pg.page_id(), pg.right_id());
 			pg.right_id() = splitpage;
 			int flag = 1,splitpos = 0;
 			splitpos = pg.findHalf(key,rid,flag,key_itr);
@@ -87,7 +88,7 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, bpRID* rid) {
 					}
 				}
 				dir[splitpage] = splitpage;
-				page_node splitpg(NodeType::Index,splitpage,pg.page_id(),pg.right_id());
+				page_node splitpg(Index,splitpage,pg.page_id(),pg.right_id());
 				pg.right_id() = splitpage;
 				int flag = 0,splitpos = 0;
 				splitpos = pg.findHalf(childkey,rid,flag,key_itr);
