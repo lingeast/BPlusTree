@@ -32,8 +32,8 @@ public:
 	std::string to_string() const;
 
 	varchar_key();
-	bool operator<(const comparable &);
-	bool operator==(const comparable &);
+	bool operator<(const varchar_key &);
+	bool operator==(const varchar_key &);
 
 	~varchar_key();
 };

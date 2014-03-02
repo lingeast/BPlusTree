@@ -35,7 +35,7 @@ bp_tree::~bp_tree() {
 
 void bp_tree::insert_entry(bt_key *key, serializable *rid) {
 
-
+	//insert_to_page
 }
 
 bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, serializable* rid) {
