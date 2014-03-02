@@ -7,6 +7,8 @@
 
 #include "varcharkey.h"
 #include <iostream>
+#include <cstring>
+#include <stdint.h>
 
 varchar_key::varchar_key() : raw_data(NULL), len(0), str() {}
 
@@ -18,7 +20,7 @@ size_t varchar_key::length() const {
 	return len;
 }
 
-void* varchar_key::data() const {
+const void* varchar_key::data() const {
 	return (void*) raw_data;
 }
 
@@ -41,6 +43,7 @@ std::string varchar_key::to_string() const {
 	return str;
 }
 
+
 bool varchar_key::operator<(const varchar_key & that) {
 	return this->str < that.str;
 }
@@ -48,5 +51,26 @@ bool varchar_key::operator<(const varchar_key & that) {
 bool varchar_key::operator==(const varchar_key & that) {
 	return this->str == that.str;
 }
+
+bool varchar_key::operator<(const comparable &rhs) {
+    const varchar_key *pRhs = dynamic_cast<const varchar_key *>(&rhs);
+    if (pRhs == NULL) { // rhs is of another type
+         return false;
+     } else {
+          // Do work to compare two Derived objects
+    	 return (str.compare(pRhs->str) < 0);
+     }
+}
+
+bool varchar_key::operator==(const comparable &rhs)  {
+    const varchar_key *pRhs = dynamic_cast<const varchar_key *>(&rhs);
+    if (pRhs == NULL) { // rhs is of another type
+         return false;
+     } else {
+          // Do work to compare two Derived objects
+    	 return this->str == pRhs->str;
+     }
+}
+
 
 

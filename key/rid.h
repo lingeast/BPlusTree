@@ -9,12 +9,13 @@
 #define RID_H_
 
 #include "serializable.h"
+#include <stdint.h>
 
 namespace BPlusTree {
 
 class rid: public BPlusTree::serializable {
 private:
-	uint32_t id;
+	int id;
 public:
 	size_t length(){return sizeof(id);}
 	void* data() const {return (void *)&id;}

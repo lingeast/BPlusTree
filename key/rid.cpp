@@ -7,6 +7,8 @@
 
 #include "rid.h"
 #include <stdlib.h>
+#include <cstring>
+#include <cstdio>
 
 namespace BPlusTree {
 

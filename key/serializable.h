@@ -20,7 +20,7 @@ public:
 	 *	Empty serializable obj is determined by len() == 0 && data() == NULL
 	 */
 	virtual size_t length() const = 0;
-	virtual void* data() const = 0;
+	virtual const void* data() const = 0;
 
 	// load from memory, serialzable_ptr->load(ptr_to_position);
 	virtual void load(const void *) = 0;

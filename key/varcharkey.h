@@ -24,7 +24,7 @@ private:
 	string str;
 public:
 	size_t length() const;
-	void* data() const ;
+	const void* data() const ;
 
 	// load from memory, serialzable_ptr->load(ptr_to_position);
 	void load(const void *);
@@ -32,8 +32,12 @@ public:
 	std::string to_string() const;
 
 	varchar_key();
-	bool operator<(const varchar_key &);
-	bool operator==(const varchar_key &);
+
+	bool operator<(const varchar_key &that);
+	bool operator==(const varchar_key &that);
+
+	bool operator<(const comparable &rhs);
+	bool operator==(const comparable &rhs);
 
 	~varchar_key();
 };
