@@ -33,14 +33,14 @@ bp_tree::~bp_tree() {
 	if (fhelp != NULL) delete fhelp;
 }
 
-void bp_tree::insert_entry(bt_key *key, serializable *rid) {
+void bp_tree::insert_entry(bt_key *key, bpRID *rid) {
 
 	//insert_to_page
 }
 
-bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, serializable* rid) {
+bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, bpRID* rid) {
 	if (pg.is_leaf_node()) {
-		if (key->length() <= PAGE_SIZE - pg.end_offset()){
+		if (key->length() + sizeof(rid) <= PAGE_SIZE - pg.end_offset()){
 			pg.insert(key,rid,key_itr);
 			return NULL;
 		}else{
@@ -54,8 +54,8 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, serializable* rid) {
 			dir[splitpage] = splitpage;
 			page_node splitpg(NodeType::Leaf,splitpage,pg.page_id(),pg.right_id());
 			pg.right_id() = splitpage;
-			int flag = 0,splitpos = 0;
-			splitpos = pg.findHalf(key,flag);
+			int flag = 1,splitpos = 0;
+			splitpos = pg.findHalf(key,rid,flag,key_itr);
 			memcpy(splitpg.content_block(), pg.content_block() + splitpos, pg.end_offset() - splitpos);
 			pg.end_offset() = splitpos;
 			if (flag == 0)
@@ -72,12 +72,12 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, serializable* rid) {
 		// if splitting happen return a key ptr
 		// else return NULL ptr
 	} else {
-		page_node child_pg(pg.findEntry(key));
+		page_node child_pg(pg.findEntry(key, key_itr));
 		fhelp->read_page(child_pg.page_id(),child_pg.page_block());
-		bt_key *pullkey = insert_to_page(child_pg,key,rid);
-		if (pullkey != NULL){
-			if(pullkey->length() + sizeof(int16_t) <= PAGE_SIZE - pg.end_offset())
-				pg.insert(key,rid,key_itr);
+		bt_key *childkey = insert_to_page(child_pg,key,rid);
+		if (childkey != NULL){
+			if(childkey->length() + sizeof(int16_t) <= PAGE_SIZE - pg.end_offset())
+				pg.insert(childkey,rid,key_itr);
 			else{
 				uint16_t splitpage = 0;
 				for (uint16_t i=1;i<PAGE_SIZE/sizeof(uint16_t);i++){
@@ -90,15 +90,26 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, serializable* rid) {
 				page_node splitpg(NodeType::Index,splitpage,pg.page_id(),pg.right_id());
 				pg.right_id() = splitpage;
 				int flag = 0,splitpos = 0;
-				splitpos = pg.findHalf(key,flag);
+				splitpos = pg.findHalf(childkey,rid,flag,key_itr);
 				if(flag == 0){
 					bt_key *pullkey;
-					pullkey -> load(splitpg.content_block());
-					splitpg.insert(key,rid,key_itr);
+					pullkey -> load(pg.content_block() + splitpos);
+					memcpy(splitpg.content_block(),pg.content_block() + splitpos + pullkey->length(),pg.end_offset() - splitpos - pullkey->length());
+					pg.insert(childkey,rid,key_itr);
 					return pullkey;
 				}
 				else {
-
+					bt_key *pullkey;
+					key_itr-> load(pg.content_block() + splitpos);
+					if(childkey < key_itr){
+						memcpy(splitpg.content_block(),pg.content_block() + splitpos,pg.end_offset() - splitpos);
+						return childkey;
+					}else{
+						pullkey->load(pg.content_block() + splitpos);
+						memcpy(splitpg.content_block(),pg.content_block() + splitpos + pullkey->length(),pg.end_offset() - splitpos - pullkey->length());
+						splitpg.insert(childkey,rid,key_itr);
+						return pullkey;
+					}
 				}
 
 			}
