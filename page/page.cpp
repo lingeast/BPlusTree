@@ -35,7 +35,7 @@ void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 			memcpy(content + offset + key->length(), &child.right_id(), sizeof(uint16_t));
 			*end += key->length() + sizeof(uint16_t);
 		} else {
-			// TODO increment offset
+			offset += itr->length() + sizeof(uint16_t);
 		}
 	}
 }
@@ -50,7 +50,7 @@ void page_node::insert_to_leaf(bt_key* key, RID rid, bt_key* itr) {
 			memcpy(content + offset + key->length(), &rid, sizeof(rid));
 			*end += key->length() + sizeof(rid);
 		} else {
-			// TODO: increment offset
+			offset += itr->length() + sizeof(rid);
 		}
 	}
 }
