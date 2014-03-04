@@ -38,19 +38,17 @@ void page_node::print_leaf(bt_key* itr) const {
 
 void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 	int offset = sizeof(uint16_t);
-	while (offset< *end){
+	while(true){
+		if(offset >= *end) break;
 		itr->load(content + offset);
-		if (!(*itr < *key)){
-			memmove(content + offset + key->length() + sizeof(uint16_t), content + offset, *end - offset);
-			memcpy(content + offset, key->data(),key->length());
-			memcpy(content + offset + key->length(), &rid.pageNum, sizeof(uint16_t));
-			//std::cout<<"insert "
-			*end += key->length() + sizeof(uint16_t);
-			break;
-		} else {
-			offset += itr->length() + sizeof(uint16_t);
-		}
+		if (!(*itr < *key)) break;
+		offset += itr->length() + sizeof(int16_t);
 	}
+	memmove(content + offset + key->length() + sizeof(uint16_t), content + offset, *end - offset);
+	memcpy(content + offset, key->data(),key->length());
+	memcpy(content + offset + key->length(), &rid.pageNum, sizeof(uint16_t));
+	//std::cout<<"insert "
+	*end += key->length() + sizeof(uint16_t);
 }
 
 void page_node::insert_to_leaf(bt_key* key, RID rid, bt_key* itr) {

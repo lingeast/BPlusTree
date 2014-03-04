@@ -187,6 +187,7 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 					}else{
 						key_itr->load(pg.content_block() + splitpos);
 						memcpy(splitpg.content_block(),pg.content_block() + splitpos + key_itr->length(),pg.end_offset() - splitpos - key_itr->length());
+						cout<<"right length"<<pg.end_offset() - splitpos - key_itr->length()<<endl;
 						splitpg.end_offset() = pg.end_offset() - splitpos - key_itr->length();
 						pg.right_id() = splitpg.page_id();
 						pg.end_offset() = splitpos;
