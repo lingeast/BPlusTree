@@ -19,6 +19,7 @@ private:
 	float_key_t val;
 public:
 	float_key();
+	float_key(const float_key &);
 	virtual ~float_key();
 
 	size_t length() const {return len;}
@@ -34,6 +35,10 @@ public:
 
 	bool operator<(const comparable &rhs);
 	bool operator==(const comparable &rhs);
+
+	bt_key* clone() const {
+		return new float_key(*this);
+	}
 };
 
 #endif /* FLOATKEY_H_ */

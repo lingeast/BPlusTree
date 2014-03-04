@@ -12,6 +12,12 @@
 
 varchar_key::varchar_key() : raw_data(NULL), len(0), str() {}
 
+varchar_key::varchar_key(const varchar_key &that) :
+		raw_data(NULL), len(that.len), str(that.str) {
+	this->raw_data = new char[this->len];
+	memcpy(this->raw_data, that.raw_data, this->len);
+}
+
 varchar_key::~varchar_key() {
 	if (raw_data != NULL)
 		delete raw_data;

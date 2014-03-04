@@ -17,6 +17,8 @@ bpt_scan_itr::bpt_scan_itr(std::string fname, bt_key* lok, bt_key* hik, bool lo_
 	fhelp.write_page(dir[cur_leaf.page_id()], cur_leaf.page_block()); // read in root page
 	while(!cur_leaf.is_leaf_node()) {
 		int entry = cur_leaf.findEntry(lok, hik);
+		break;
+		// TODO keep moving until reach leaf node
 	}
 }
 

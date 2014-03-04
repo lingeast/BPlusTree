@@ -19,6 +19,7 @@ private:
 	size_t len;
 public:
 	int_key();
+	int_key(const int_key &);
 	virtual ~int_key();
 
 	size_t length() const {return len;}
@@ -34,6 +35,10 @@ public:
 
 	bool operator<(const comparable &);
 	bool operator==(const comparable &);
+
+	bt_key* clone() const {
+		return new int_key(*this);
+	}
 
 };
 

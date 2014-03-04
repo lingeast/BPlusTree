@@ -15,6 +15,9 @@ float_key::float_key() : len(0), val(0) {
 
 }
 
+float_key::float_key(const float_key & that):
+		len(that.len), val(that.val) {}
+
 float_key::~float_key() {
 	// TODO Auto-generated destructor stub
 }
@@ -22,7 +25,7 @@ float_key::~float_key() {
 void float_key::load(const void* data) {
 	memcpy(&val, data, sizeof(float_key_t));
 	len = sizeof(float_key_t);
-	float val = *(float*)data;
+	//float val = *(float*)data;
 	//std::cout << "Read in " << val << std::endl;
 }
 

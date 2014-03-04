@@ -9,7 +9,9 @@
 #include <stdio.h>
 int_key::int_key(): val(0), len(0) {
 	// TODO Auto-generated constructor stub
+}
 
+int_key::int_key(const int_key& that) : val(that.val) , len(that.len){
 }
 
 int_key::~int_key() {

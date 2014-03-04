@@ -20,7 +20,7 @@ class bt_key : public serializable , public comparable{
 	 */
 public:
 	virtual ~bt_key(){}
-	//virtual bt_key* clone() const = 0;
+	virtual bt_key* clone() const = 0;
 };
 
 }

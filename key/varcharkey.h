@@ -31,7 +31,8 @@ public:
 	// Used for debug
 	std::string to_string() const;
 
-	varchar_key();
+	varchar_key(); // default constructor
+	varchar_key(const varchar_key&);
 
 	bool operator<(const varchar_key &that);
 	bool operator==(const varchar_key &that);
@@ -40,6 +41,10 @@ public:
 	bool operator==(const comparable &rhs);
 
 	~varchar_key();
+
+	bt_key* clone() const {
+		return new varchar_key(*this);
+	}
 };
 
 #endif /* VARCHARKEY_H_ */
