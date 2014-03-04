@@ -146,6 +146,17 @@ p_offset& dir_page::operator [](int slot) const {
 	return *((p_offset*) this->page + slot);
 }
 
+int dir_page::find_empty() const {
+	for (int slot = 0; slot < PAGE_SIZE / sizeof(p_offset); slot++) {
+		if (operator[](slot) == 0) {
+			return slot;
+		}
+	}
+	throw new std::logic_error("Dir not large enough");
+	// Never reach here
+	return -1;
+}
+
 }
 
 

@@ -85,6 +85,7 @@ public:
 	int addr(int slot) {return operator[](slot);}
 	int root() const { return operator[](0);}
 	void update_root(int newroot) {operator[](0) = newroot;}
+	int find_empty() const;
 };
 
 }
