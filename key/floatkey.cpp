@@ -23,7 +23,7 @@ void float_key::load(const void* data) {
 	memcpy(&val, data, sizeof(float_key_t));
 	len = sizeof(float_key_t);
 	float val = *(float*)data;
-	std::cout << "Read in " << val << std::endl;
+	//std::cout << "Read in " << val << std::endl;
 }
 
 std::string float_key::to_string() const {
@@ -35,12 +35,12 @@ std::string float_key::to_string() const {
 }
 
 bool float_key::operator<(const float_key &that) {
-	std::cout << "In < op" << std::endl;
+	//std::cout << "In < op" << std::endl;
 	if (sizeof(float) == sizeof(val)) {
 		float lhs, rhs;
 		memcpy(&lhs, &val, sizeof(lhs));
 		memcpy(&rhs, &(that.val), sizeof(rhs));
-		std::cout << "Compare " << lhs <<" and " << rhs << std::endl;
+		//std::cout << "Compare " << lhs <<" and " << rhs << std::endl;
 		return lhs < rhs;
 	} else if (sizeof(double) == sizeof(val)) {
 		double lhs, rhs;

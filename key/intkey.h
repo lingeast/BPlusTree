@@ -32,8 +32,8 @@ public:
 	//bool operator<(const int_key &that) {return val < that.val;}
 	//bool operator==(const int_key &that) {return val == that.val;}
 
-	bool operator<(const comparable &rhs);
-	bool operator==(const comparable &rhs);
+	bool operator<(const comparable &);
+	bool operator==(const comparable &);
 
 };
 

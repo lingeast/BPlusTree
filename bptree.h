@@ -38,9 +38,9 @@ public:
 	bp_tree(const char *name, bt_key* itr);
 	~bp_tree();
 
-	void insert_entry(bt_key* key, RID rid);
+	void insert_entry(bt_key*, RID);
 
-	void delete_entry(bt_key* key, RID rid);
+	void delete_entry(bt_key*, RID);
 };
 
 
