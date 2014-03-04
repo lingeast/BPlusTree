@@ -37,6 +37,8 @@ private:
 	void insert_to_leaf(bt_key* key, RID rid, bt_key* itr);
 	int find_leaf_Half(bt_key* key, RID rid, int &flag, bt_key* itr);
 	int find_index_Half(bt_key* key, int &flag, bt_key* itr);
+	// used for debug
+	void print_leaf(bt_key *itr) const;
 public:
 	page_node(int id);	// to be used to load existing page node from file
 	page_node(NodeType, int id, int left, int right);	// to create new page node

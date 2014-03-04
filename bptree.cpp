@@ -63,6 +63,8 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 				pg.insert(key,rid,key_itr);
 			else splitpg.insert(key,rid,key_itr);
 			bt_key *pullkey;
+			// TODO need an instantiated obj
+			// ie. bt_key* pullkey = key
 			pullkey -> load(splitpg.content_block());
 			fhelp -> write_page(0,dir.page_block());
 			fhelp -> write_page(pg.page_id(),pg.page_block());
@@ -94,6 +96,8 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 				splitpos = pg.findHalf(childkey,rid,flag,key_itr);
 				if(flag == 0){
 					bt_key *pullkey;
+					// TODO need an instantiated obj
+					// ie. bt_key* pullkey = key
 					pullkey -> load(pg.content_block() + splitpos);
 					memcpy(splitpg.content_block(),pg.content_block() + splitpos + pullkey->length(),pg.end_offset() - splitpos - pullkey->length());
 					pg.insert(childkey,rid,key_itr);

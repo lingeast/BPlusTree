@@ -8,8 +8,21 @@
 #include "page.h"
 #include <stdexcept>
 #include <cstring>
+#include <iostream>
 
 namespace BPlusTree{
+
+void page_node::print_leaf(bt_key* itr) const {
+	int offset = 0;
+	int length = *(this->end);
+	while (offset < length) {
+		// use itr to load
+		itr->load(this->content + offset);
+		std::cout << itr->to_string() << ", " << std::endl;
+		// incre offset
+		offset += itr->length() + sizeof(RID);
+	}
+}
 
 void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 	int offset = sizeof(uint16_t);
@@ -21,6 +34,8 @@ void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 			page_node child(*(uint16_t*)(content + offset - sizeof(uint16_t)));
 			memcpy(content + offset + key->length(), &child.right_id(), sizeof(uint16_t));
 			*end += key->length() + sizeof(uint16_t);
+		} else {
+			// TODO increment offset
 		}
 	}
 }
@@ -34,6 +49,8 @@ void page_node::insert_to_leaf(bt_key* key, RID rid, bt_key* itr) {
 			memcpy(content + offset, key->data(),key->length());
 			memcpy(content + offset + key->length(), &rid, sizeof(rid));
 			*end += key->length() + sizeof(rid);
+		} else {
+			// TODO: increment offset
 		}
 	}
 }
