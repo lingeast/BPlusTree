@@ -101,12 +101,12 @@ void test2() {
 	RID rid;
 	rid.slotNum = 0; rid.pageNum = 0;
 
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 600; i++) {
 		//
 		int32_t num = 1000 - i;
 		ikey->load(&num);
 		cout << "Inserting " << i << "th number" << endl;
-		if (i == 340) {
+		if (i == 511) {
 			int m = 8;
 		}
 		test_bpt.insert_entry(ikey, rid);
