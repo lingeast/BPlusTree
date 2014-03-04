@@ -99,11 +99,7 @@ int page_node::findEntry(bt_key* key, bt_key *itr){
 			offset += sizeof(uint16_t) + itr->length();
 		}
 	}
-	{
-
-		std::cout<<"entry is "<<*(uint16_t*)(this->content)<<std::endl;
-		return *(uint16_t*)(this->content + *end - sizeof(uint16_t));
-	}
+	return *(uint16_t*)(this->content + *end - sizeof(uint16_t));
 }
 
 int page_node::findHalf(bt_key* key, RID rid,int &flag, bt_key *itr){
