@@ -101,7 +101,7 @@ void test2() {
 	RID rid;
 	rid.slotNum = 0; rid.pageNum = 0;
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 8; i++) {
 		//
 		int32_t num = 10 - i;
 		ikey->load(&num);
@@ -111,6 +111,12 @@ void test2() {
 		}
 		test_bpt.insert_entry(ikey, rid);
 	}
+
+	int32_t num = 8;
+	ikey->load(&num);
+	cout << "Inserting  8 th number" << endl;
+	test_bpt.insert_entry(ikey, rid);
+
 	cout << "########Test(2) insertion end. \n\n" << endl;
 }
 int main() {

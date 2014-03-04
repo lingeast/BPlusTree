@@ -43,8 +43,8 @@ void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 		if (!(*itr < *key)){
 			memmove(content + offset + key->length() + sizeof(uint16_t), content + offset, *end - offset);
 			memcpy(content + offset, key->data(),key->length());
-			page_node child(*(uint16_t*)(content + offset - sizeof(uint16_t)));
-			memcpy(content + offset + key->length(), &child.right_id(), sizeof(uint16_t));
+			memcpy(content + offset + key->length(), &rid.pageNum, sizeof(uint16_t));
+			//std::cout<<"insert "
 			*end += key->length() + sizeof(uint16_t);
 			break;
 		} else {
@@ -91,6 +91,7 @@ int page_node::findEntry(bt_key* key, bt_key *itr){
 		itr->load((this->content) + offset);
 		if (*key < *itr){
 			uint16_t entry = *(uint16_t*)(this->content + offset - sizeof(uint16_t));
+			//std::cout<<"entry in page:"<<entry<<std::endl;
 			return entry;
 		}else{
 			offset += sizeof(uint16_t) + itr->length();
