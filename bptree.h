@@ -46,6 +46,9 @@ public:
 	void delete_entry(bt_key*, RID);
 
 
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
+=======
 >>>>>>> FETCH_HEAD
 };
 
