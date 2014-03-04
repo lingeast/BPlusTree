@@ -94,13 +94,16 @@ int page_node::findEntry(bt_key* key, bt_key *itr){
 		itr->load((this->content) + offset);
 		if (*key < *itr){
 			uint16_t entry = *(uint16_t*)(this->content + offset - sizeof(uint16_t));
-			//std::cout<<"entry in page:"<<entry<<std::endl;
 			return entry;
 		}else{
 			offset += sizeof(uint16_t) + itr->length();
 		}
 	}
-	return *(uint16_t*)(this->content + *end - sizeof(uint16_t));
+	{
+
+		std::cout<<"entry is "<<*(uint16_t*)(this->content)<<std::endl;
+		return *(uint16_t*)(this->content + *end - sizeof(uint16_t));
+	}
 }
 
 int page_node::findHalf(bt_key* key, RID rid,int &flag, bt_key *itr){
@@ -136,6 +139,30 @@ int page_node::find_index_Half(bt_key* key,int &flag, bt_key* itr) {
 		offset += itr->length() + sizeof(uint16_t);
 	}
 	return offset;
+}
+
+int page_node::delete_leaf(bt_key *key, RID rid, bt_key *itr){
+	int offset = 0;
+	while (offset < *end){
+		itr->load(content + offset);
+		if(*itr == *key){
+			int RID_pg = *(int32_t*)(content + offset + itr->length());
+			int RID_sl = *(int32_t*)(content + offset + itr->length() + sizeof(int32_t));
+			if (rid.pageNum == RID_pg && rid.slotNum == RID_sl)
+				break;
+			else {
+				offset += itr->length() + sizeof(RID);
+			}
+		}else{
+			offset += itr->length() + sizeof(RID);
+		}
+	}
+	if (offset >= *end) return -1;
+	else{
+		memmove(content + offset, content + offset + itr->length() + sizeof(RID), *end - offset - itr->length() - sizeof(RID));
+		*end -= key->length() + sizeof(RID);
+		return 0;
+	}
 }
 
 dir_page::dir_page() {

@@ -111,6 +111,11 @@ void test2() {
 		}
 		test_bpt.insert_entry(ikey, rid);
 	}
+	int32_t num = 10;
+	ikey->load(&num);
+	cout << "Deleting  0 th number" << endl;
+	test_bpt.delete_entry(ikey,rid);
+
 
 
 	cout << "########Test(2) insertion end. \n\n" << endl;

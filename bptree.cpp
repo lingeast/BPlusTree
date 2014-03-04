@@ -38,16 +38,33 @@ bp_tree::~bp_tree() {
 }
 
 int bp_tree::delete_entry(bt_key *key, RID rid) {
+	int ret = -1;
 	if (dir.root() < 1){
 		return -1;
 	}
+	cout <<"root is page: "<<dir.root()<<endl;
 	page_node pg(dir.root());
 	fhelp->read_page(dir[pg.page_id()], pg.page_block());
-	while(!pg.is_leaf_node()){
-		int entrypg = pg.findEntry(key,key_itr);
-		pg.p
-	}
+	cout<<"test"<<endl;
 
+	//while(!pg.is_leaf_node()){
+		int entrypg = pg.findEntry(key,key_itr);
+		pg.set_id(entrypg);
+		fhelp->read_page(dir[pg.page_id()],pg.page_block());
+		cout<<"page "<<pg.page_id()<<" is leaf? "<<pg.is_leaf_node()<<endl;
+
+		entrypg = pg.findEntry(key,key_itr);
+		pg.set_id(entrypg);
+		fhelp->read_page(dir[pg.page_id()],pg.page_block());
+		cout<<"page "<<pg.page_id()<<" is leaf? "<<pg.is_leaf_node()<<endl;
+	/*
+	}
+	cout<<"page before delete:"<<endl;
+	pg.print_leaf(key_itr);
+	ret = pg.delete_leaf(key,rid,key_itr);
+	pg.print_leaf(key_itr);
+	return ret;
+	*/
 }
 
 void bp_tree::insert_entry(bt_key *key, RID rid) {
@@ -77,6 +94,7 @@ void bp_tree::insert_entry(bt_key *key, RID rid) {
 		}
 		page_node newroot(Index, splitpage, 0, 0);
 		dir.update_root(newroot.page_id());
+		cout<<"root is now: "<<newroot.page_id()<<endl;
 		dir[splitpage] = splitpage;
 		uint16_t id = root.page_id();
 		memcpy(newroot.content_block(), &id, sizeof(int16_t));
