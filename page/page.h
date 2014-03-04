@@ -40,8 +40,10 @@ private:
 
 
 public:
+	page_node(); //default constructor
 	page_node(int id);	// to be used to load existing page node from file
 	page_node(NodeType, int id, int left, int right);	// to create new page node
+	void set_id(uint16_t id) {this->pageID = id;}
 	char* content_block() const {return content;}
 	void* page_block() const {return (void*) page;}
 	bool is_leaf_node() const {return *is_leaf == 1;}

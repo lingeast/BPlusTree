@@ -41,6 +41,8 @@ public:
 	void insert_entry(bt_key*, RID);
 
 	void delete_entry(bt_key*, RID);
+
+
 };
 
 
