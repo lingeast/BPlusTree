@@ -151,12 +151,16 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 				int flag = 0,splitpos = 0;
 				splitpos = pg.findHalf(key,rid,flag,key_itr);
 				if(flag == 0){
-					memcpy(splitpg.content_block(),pg.content_block() + splitpos ,pg.end_offset() - splitpos);
-					splitpg.end_offset() = pg.end_offset() - splitpos; // update new end of right leaf;
+					key_itr->load(pg.content_block() + splitpos);
+					memcpy(splitpg.content_block(),pg.content_block() + splitpos + key_itr->length() ,pg.end_offset() - splitpos - key_itr->length());
+					splitpg.end_offset() = pg.end_offset() - splitpos -  key_itr->length(); // update new end of right leaf;
 					pg.right_id() = splitpg.page_id(); // update right id of original leaf
 					pg.end_offset() = splitpos; // update new end offset of orginal leaf
+					void *tempkey = malloc(key_itr->length());
+					memcpy(tempkey,key_itr->data(),key_itr->length());
 					pg.insert(key,rid,key_itr);
-					key->load(pg.content_block() + splitpos);
+					key->load(tempkey);
+					free(tempkey);
 					cout<<"Split happen at index(left)"<<endl;
 					pg.print_index(key_itr);
 					cout<<"right"<<endl;
@@ -174,9 +178,9 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 						pg.right_id() = splitpg.page_id();
 						splitpg.end_offset() = pg.end_offset() - splitpos + sizeof(int16_t);
 						cout<<"Split happen at index(left)"<<endl;
-											pg.print_index(key_itr);
-											cout<<"right"<<endl;
-											splitpg.print_index(key_itr);
+						pg.print_index(key_itr);
+						cout<<"right"<<endl;
+						splitpg.print_index(key_itr);
 						return key;
 					}else{
 						key_itr->load(pg.content_block() + splitpos);
@@ -187,9 +191,9 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 						splitpg.insert(key,rid,key_itr);
 						key->load(pg.content_block() + splitpos);
 						cout<<"Split happen at index(left)"<<endl;
-											pg.print_index(key_itr);
-											cout<<"right"<<endl;
-											splitpg.print_index(key_itr);
+						pg.print_index(key_itr);
+						cout<<"right"<<endl;
+						splitpg.print_index(key_itr);
 						return key;
 					}
 				}
