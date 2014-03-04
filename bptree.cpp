@@ -43,6 +43,7 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 	if (pg.is_leaf_node()) {
 		if (key->length() + sizeof(rid) <= PAGE_SIZE - pg.end_offset()){
 			pg.insert(key,rid,key_itr);
+			fhelp -> write_page(pg.page_id(),pg.page_block());
 			return NULL;
 		}else{
 			uint16_t splitpage = 0;
@@ -62,14 +63,12 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 			if (flag == 0)
 				pg.insert(key,rid,key_itr);
 			else splitpg.insert(key,rid,key_itr);
-			bt_key *pullkey;
-			// TODO need an instantiated obj
-			// ie. bt_key* pullkey = key
-			pullkey -> load(splitpg.content_block());
+
+			key -> load(splitpg.content_block());
 			fhelp -> write_page(0,dir.page_block());
 			fhelp -> write_page(pg.page_id(),pg.page_block());
 			fhelp -> write_page(splitpg.page_id(),splitpg.page_block());
-			return pullkey;
+			return key;
 		}
 		// insert into leaf node
 		// if splitting happen return a key ptr
@@ -77,10 +76,13 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 	} else {
 		page_node child_pg(pg.findEntry(key, key_itr));
 		fhelp->read_page(child_pg.page_id(),child_pg.page_block());
-		bt_key *childkey = insert_to_page(child_pg,key,rid);
-		if (childkey != NULL){
-			if(childkey->length() + sizeof(int16_t) <= PAGE_SIZE - pg.end_offset())
-				pg.insert(childkey,rid,key_itr);
+		key = insert_to_page(child_pg,key,rid);
+		if (key != NULL){
+			if(key->length() + sizeof(int16_t) <= PAGE_SIZE - pg.end_offset()){
+				pg.insert(key,rid,key_itr);
+				fhelp -> write_page(pg.page_id(), pg.page_block());
+				return NULL;
+			}
 			else{
 				uint16_t splitpage = 0;
 				for (uint16_t i=1;i<PAGE_SIZE/sizeof(uint16_t);i++){
@@ -93,30 +95,29 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 				page_node splitpg(Index,splitpage,pg.page_id(),pg.right_id());
 				pg.right_id() = splitpage;
 				int flag = 0,splitpos = 0;
-				splitpos = pg.findHalf(childkey,rid,flag,key_itr);
+				splitpos = pg.findHalf(key,rid,flag,key_itr);
 				if(flag == 0){
-					bt_key *pullkey;
-					// TODO need an instantiated obj
-					// ie. bt_key* pullkey = key
-					pullkey -> load(pg.content_block() + splitpos);
-					memcpy(splitpg.content_block(),pg.content_block() + splitpos + pullkey->length(),pg.end_offset() - splitpos - pullkey->length());
-					pg.insert(childkey,rid,key_itr);
-					return pullkey;
+					memcpy(splitpg.content_block(),pg.content_block() + splitpos ,pg.end_offset() - splitpos);
+					pg.insert(key,rid,key_itr);
+					key->load(pg.content_block() + splitpos);
+					return key;
 				}
 				else {
-					bt_key *pullkey;
 					key_itr-> load(pg.content_block() + splitpos);
-					if(childkey < key_itr){
+					if(key < key_itr){
 						memcpy(splitpg.content_block(),pg.content_block() + splitpos,pg.end_offset() - splitpos);
-						return childkey;
+						return key;
 					}else{
-						pullkey->load(pg.content_block() + splitpos);
-						memcpy(splitpg.content_block(),pg.content_block() + splitpos + pullkey->length(),pg.end_offset() - splitpos - pullkey->length());
-						splitpg.insert(childkey,rid,key_itr);
-						return pullkey;
+						key_itr->load(pg.content_block() + splitpos);
+						memcpy(splitpg.content_block(),pg.content_block() + splitpos + key_itr->length(),pg.end_offset() - splitpos - key_itr->length());
+						splitpg.insert(key,rid,key_itr);
+						key->load(pg.content_block() + splitpos);
+						return key;
 					}
 				}
-
+				fhelp ->write_page(0,dir.page_block());
+				fhelp ->write_page(pg.page_id(),pg.page_block());
+				fhelp ->write_page(splitpg.page_id(),splitpg.page_block());
 			}
 		}else return NULL;
 		// find next page, read it out
