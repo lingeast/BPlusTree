@@ -112,6 +112,7 @@ int main() {
 	//BPlusTree::bp_tree indexTree("my_name");
 	cout << "Hello B+ Tree" << endl;
 	test1();
+	test2();
 
 }
 
