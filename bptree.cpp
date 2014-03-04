@@ -37,6 +37,19 @@ bp_tree::~bp_tree() {
 	if (fhelp != NULL) delete fhelp;
 }
 
+int bp_tree::delete_entry(bt_key *key, RID rid) {
+	if (dir.root() < 1){
+		return -1;
+	}
+	page_node pg(dir.root());
+	fhelp->read_page(dir[pg.page_id()], pg.page_block());
+	while(!pg.is_leaf_node()){
+		int entrypg = pg.findEntry(key,key_itr);
+		pg.p
+	}
+
+}
+
 void bp_tree::insert_entry(bt_key *key, RID rid) {
 
 	if (dir.root() < 1) {

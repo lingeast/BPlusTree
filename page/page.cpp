@@ -65,6 +65,11 @@ void page_node::insert_to_leaf(bt_key* key, RID rid, bt_key* itr) {
 	*end += key->length() + sizeof(rid);
 
 }
+
+page_node::page_node() : pageID(-1), is_leaf((uint16_t*)page),
+		left(is_leaf + 1), right(left + 1),
+		end(right + 1), content((char*)(end + 1)){}
+
 page_node::page_node(int id) : pageID(id), is_leaf((uint16_t*)page),
 						left(is_leaf + 1), right(left + 1),
 						end(right + 1), content((char*)(end + 1)){}
