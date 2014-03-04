@@ -40,9 +40,16 @@ public:
 
 	void insert_entry(bt_key*, RID);
 
+<<<<<<< HEAD
+	int delete_entry(bt_key*, RID);
+=======
 	void delete_entry(bt_key*, RID);
 
 
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
 };
 
 
