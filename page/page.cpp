@@ -18,17 +18,18 @@ void page_node::print_leaf(bt_key* itr) const {
 	while (offset < length) {
 		// use itr to load
 		itr->load(this->content + offset);
-		std::cout << itr->to_string() << ", " << std::endl;
+		std::cout << itr->to_string() << ", ";
 		// incre offset
 		offset += itr->length() + sizeof(RID);
 	}
+	std::cout << std::endl;
 }
 
 void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 	int offset = sizeof(uint16_t);
 	while (offset< *end){
 		itr->load(content + offset);
-		if (!(itr < key)){
+		if (!(*itr < *key)){
 			memmove(content + offset + key->length() + sizeof(uint16_t), content + offset, *end - offset);
 			memcpy(content + offset, key->data(),key->length());
 			page_node child(*(uint16_t*)(content + offset - sizeof(uint16_t)));
@@ -42,17 +43,17 @@ void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 
 void page_node::insert_to_leaf(bt_key* key, RID rid, bt_key* itr) {
 	int offset = 0;
-	while(offset < *end){
+	while(true) {
+		if(offset >= *end) break;
 		itr->load(content + offset);
-		if (!(itr < key)){
-			memmove(content + offset + key->length() + sizeof(rid), content + offset, *end - offset);
-			memcpy(content + offset, key->data(),key->length());
-			memcpy(content + offset + key->length(), &rid, sizeof(rid));
-			*end += key->length() + sizeof(rid);
-		} else {
-			offset += itr->length() + sizeof(rid);
-		}
+		if (!(*itr < *key)) break;
+		offset += itr->length() + sizeof(rid);
 	}
+	memmove(content + offset + key->length() + sizeof(rid), content + offset, *end - offset);
+	memcpy(content + offset, key->data(),key->length());
+	memcpy(content + offset + key->length(), &rid, sizeof(rid));
+	*end += key->length() + sizeof(rid);
+
 }
 page_node::page_node(int id) : pageID(id), is_leaf((uint16_t*)page),
 						left(is_leaf + 1), right(left + 1),
@@ -76,7 +77,7 @@ int page_node::findEntry(bt_key* key, bt_key *itr){
 	int offset = sizeof(uint16_t);
 	while (offset < *end){
 		itr->load((this->content) + offset);
-		if (key < itr){
+		if (*key < *itr){
 			uint16_t entry = *(uint16_t*)(this->content + offset - sizeof(uint16_t));
 			return entry;
 		}else{
@@ -95,7 +96,7 @@ int page_node::find_leaf_Half(bt_key* key, RID rid,int &flag,bt_key* itr) {
 	int offset = 0;
 	while(offset + (key->length() + sizeof(rid))* (1 - flag) < *end/2){
 		itr -> load(content + offset);
-		if (!(itr < key)){
+		if (!(*itr < *key)){
 			flag = 0;
 			if(offset + key->length() +sizeof(rid)>= *end/2){
 				return offset;
@@ -110,7 +111,7 @@ int page_node::find_index_Half(bt_key* key,int &flag, bt_key* itr) {
 	int offset = sizeof(uint16_t);
 	while(offset + (key->length() + sizeof(uint16_t)) * (1- flag) < *end/2){
 		itr -> load(content + offset);
-		if (!(itr < key)){
+		if (!(*itr < *key)){
 			flag = 0;
 			if(offset + key->length() >= *end/2){
 				return offset;

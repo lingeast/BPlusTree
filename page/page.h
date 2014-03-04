@@ -26,7 +26,7 @@ class page_node {
 
 private:
 	char page[PAGE_SIZE];
-	int pageID;
+	uint16_t pageID;
 	uint16_t * is_leaf;	// is_left == 1 => is leaf page, == 0 => is index page
 	uint16_t * left;		// page id of left sibling
 	uint16_t * right;	// page id of right sibling
@@ -37,21 +37,21 @@ private:
 	void insert_to_leaf(bt_key* key, RID rid, bt_key* itr);
 	int find_leaf_Half(bt_key* key, RID rid, int &flag, bt_key* itr);
 	int find_index_Half(bt_key* key, int &flag, bt_key* itr);
-	// used for debug
-	void print_leaf(bt_key *itr) const;
+
+
 public:
 	page_node(int id);	// to be used to load existing page node from file
 	page_node(NodeType, int id, int left, int right);	// to create new page node
 	char* content_block() const {return content;}
 	void* page_block() const {return (void*) page;}
-	bool is_leaf_node() const {return *is_leaf == 0;}
+	bool is_leaf_node() const {return *is_leaf == 1;}
 	// Pass reference to outside
 	uint16_t& left_id() const {return *left;}
 	uint16_t& right_id() const {return *right;}
 	uint16_t& end_offset() const { return *end;}
 	//uint16_t& parent_id() {return *parent;}
 
-	int page_id() const {return pageID;}
+	uint16_t page_id() const {return pageID;}
 
 	/*
 	 * Insert <key, rid> pair to page
@@ -60,6 +60,8 @@ public:
 	void insert(bt_key* key, RID rid, bt_key* itr);
 	int findEntry(bt_key* key, bt_key *itr);
 	int findHalf(bt_key* key, RID rid,int &flag, bt_key *itr);
+	// used for debug
+	void print_leaf(bt_key *itr) const;
 };
 
 /*

@@ -101,9 +101,14 @@ void test2() {
 	RID rid;
 	rid.slotNum = 0; rid.pageNum = 0;
 
-	for (int i = 0; i < 10000; i++) {
-		int32_t num = rand() % 1000;
+	for (int i = 0; i < 1000; i++) {
+		//
+		int32_t num = 1000 - i;
 		ikey->load(&num);
+		cout << "Inserting " << i << "th number" << endl;
+		if (i == 340) {
+			int m = 8;
+		}
 		test_bpt.insert_entry(ikey, rid);
 	}
 	cout << "########Test(2) insertion end. \n\n" << endl;
