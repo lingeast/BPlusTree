@@ -101,9 +101,9 @@ void test2() {
 	RID rid;
 	rid.slotNum = 0; rid.pageNum = 0;
 
-	for (int i = 0; i < 600; i++) {
+	for (int i = 0; i < 10; i++) {
 		//
-		int32_t num = 1000 - i;
+		int32_t num = 10 - i;
 		ikey->load(&num);
 		cout << "Inserting " << i << "th number" << endl;
 		if (i == 511) {

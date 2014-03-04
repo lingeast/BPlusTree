@@ -12,6 +12,17 @@
 
 namespace BPlusTree{
 
+void page_node::print_index(bt_key *itr) const {
+	int offset = sizeof(uint16_t);
+	int length = *(this->end);
+	while (offset < length) {
+		itr->load(content + offset);
+		std::cout << itr->to_string() << ", ";
+		offset += itr->length() + sizeof(uint16_t);
+	}
+	std::cout << std::endl;
+}
+
 void page_node::print_leaf(bt_key* itr) const {
 	int offset = 0;
 	int length = *(this->end);
@@ -35,6 +46,7 @@ void page_node::insert_to_index(bt_key* key, RID rid, bt_key* itr) {
 			page_node child(*(uint16_t*)(content + offset - sizeof(uint16_t)));
 			memcpy(content + offset + key->length(), &child.right_id(), sizeof(uint16_t));
 			*end += key->length() + sizeof(uint16_t);
+			break;
 		} else {
 			offset += itr->length() + sizeof(uint16_t);
 		}

@@ -109,7 +109,8 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 				pg.insert(key,rid,key_itr);
 			else splitpg.insert(key,rid,key_itr);
 
-			key -> load(splitpg.content_block());
+			bt_key* newkey = key;
+			newkey -> load(splitpg.content_block());
 			fhelp -> write_page(0,dir.page_block());
 			fhelp -> write_page(pg.page_id(),pg.page_block());
 			fhelp -> write_page(splitpg.page_id(),splitpg.page_block());
@@ -118,17 +119,20 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 			pg.print_leaf(key_itr);
 			std::cout << "Right:" << std::endl;
 			splitpg.print_leaf(key_itr);
-			return key;
+			return newkey;
 		}
 		// insert into leaf node
 		// if splitting happen return a key ptr
-		// else return NULL ptrl
+		// else return NULL ptr
 	} else {
+		// Page is Index Node, find next step
 		page_node child_pg(pg.findEntry(key, key_itr));
 		fhelp->read_page(child_pg.page_id(),child_pg.page_block());
 		key = insert_to_page(child_pg,key,rid);
 		if (key != NULL){
+			cout << "Put key up to the index" << endl;
 			if(key->length() + sizeof(int16_t) <= PAGE_SIZE - pg.end_offset() - sizeof(int16_t) * 4){
+				//cout << "Enough room in current index node" << endl;
 				pg.insert(key,rid,key_itr);
 				fhelp -> write_page(pg.page_id(), pg.page_block());
 				return NULL;
@@ -153,6 +157,10 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 					pg.end_offset() = splitpos; // update new end offset of orginal leaf
 					pg.insert(key,rid,key_itr);
 					key->load(pg.content_block() + splitpos);
+					cout<<"Split happen at index(left)"<<endl;
+					pg.print_index(key_itr);
+					cout<<"right"<<endl;
+					splitpg.print_index(key_itr);
 					return key;
 				}
 				else {
@@ -165,7 +173,10 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 						pg.end_offset() = splitpos;
 						pg.right_id() = splitpg.page_id();
 						splitpg.end_offset() = pg.end_offset() - splitpos + sizeof(int16_t);
-
+						cout<<"Split happen at index(left)"<<endl;
+											pg.print_index(key_itr);
+											cout<<"right"<<endl;
+											splitpg.print_index(key_itr);
 						return key;
 					}else{
 						key_itr->load(pg.content_block() + splitpos);
@@ -175,6 +186,10 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 						pg.end_offset() = splitpos;
 						splitpg.insert(key,rid,key_itr);
 						key->load(pg.content_block() + splitpos);
+						cout<<"Split happen at index(left)"<<endl;
+											pg.print_index(key_itr);
+											cout<<"right"<<endl;
+											splitpg.print_index(key_itr);
 						return key;
 					}
 				}
