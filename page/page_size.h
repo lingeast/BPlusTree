@@ -13,7 +13,7 @@
 namespace BPlusTree{
 
 // page size = 4k byte
-static unsigned int const PAGE_SIZE = 32;
+static unsigned int const PAGE_SIZE = 128;
 
 // use 16bit to represent page offset in a file
 // support up to 2048 node

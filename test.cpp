@@ -9,6 +9,7 @@
 #include <cstring>
 #include <cstdlib>
 #include "bptree.h"
+#include "bptscanitr.h"
 #include "key/varcharkey.h"
 #include "key/intkey.h"
 #include "key/floatkey.h"
@@ -101,14 +102,14 @@ void test2() {
 	RID rid;
 	rid.slotNum = 0; rid.pageNum = 0;
 
-	for (int i = 0; i < 9; i++) {
-		int num = 10 - i;
-		cout << "Inserting " << i << "th number" << endl;
+	for (int i = 0; i < 100; i++) {
+		int num = 100 - i;
+		cout << "Inserting " << num << " number" << endl;
 		ikey->load(&num);
 		test_bpt.insert_entry(ikey, rid);
 		cout<<"finish insert num:"<<i<<endl;
 	}
-	int32_t num = 10;
+	int32_t num = 7;
 	ikey->load(&num);
 	cout << "Deleting  0 th number" << endl;
 	test_bpt.delete_entry(ikey,rid);
@@ -117,11 +118,32 @@ void test2() {
 
 	cout << "########Test(2) insertion end. \n\n" << endl;
 }
+
+void test3() {
+	cout << "########Test(3) scan begin" << endl;
+	int_key* lok = new int_key();
+	int_key* hik = new int_key();
+	int_key* itr = new int_key();
+	int32_t lo = -1;
+	int32_t hi = 150;
+	lok->load(&lo);
+	hik->load(&hi);
+	bpt_scan_itr scan_itr("IntTestFile.bpt", lok, hik, false, true);
+	char buffer[20];
+	RID rid;
+	while(scan_itr.get_next(rid, buffer) != -1) {
+		itr->load(buffer);
+		cout << itr->to_string() << ",";
+	}
+	cout << "########Test(3) scan end \n\n" << endl;
+}
+
 int main() {
 	//BPlusTree::bp_tree indexTree("my_name");
 	cout << "Hello B+ Tree" << endl;
 	test1();
 	test2();
+	test3();
 
 }
 
