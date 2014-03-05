@@ -57,6 +57,7 @@ int bp_tree::delete_entry(bt_key *key, RID rid) {
 	ret = pg.delete_leaf(key,rid,key_itr);
 	cout<<"page after delete:"<<endl;
 	pg.print_leaf(key_itr);
+	fhelp ->write_page(pg.page_id(),pg.page_block());
 	return ret;
 
 }
