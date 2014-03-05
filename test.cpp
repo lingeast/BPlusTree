@@ -94,8 +94,8 @@ void test2() {
 	cout << "########Test(2) insertion begin" << endl;
 	string bname("IntTestFile.bpt");
 
-	int_key* ikey = new int_key();
-	int_key* iitr = new int_key();
+	varchar_key* ikey = new varchar_key();
+	varchar_key* iitr = new varchar_key();
 
 	bp_tree test_bpt(bname.c_str(), iitr);
 	RID rid;
@@ -103,13 +103,23 @@ void test2() {
 
 	for (int i = 0; i < 9; i++) {
 		//
-		int32_t num = 10 - i;
-		ikey->load(&num);
+		cout<<"i is "<<i<<endl;
+		int length = i % 3 + 1;
+		void *newdata = malloc(length + sizeof(int32_t));
+		memcpy(newdata, &length, sizeof(int32_t));
+		for (int j = 0; j < length; j++){
+			char num = i % 26 + 'a';
+			//cout<<num<<" ";
+			memcpy((char*)newdata+sizeof(int32_t)+j ,& num,sizeof(char));
+		}
+		ikey->load(newdata);
 		cout << "Inserting " << i << "th number" << endl;
+		cout << "key is :" << ikey->to_string() <<endl;
 		if (i == 511) {
 			int m = 8;
 		}
 		test_bpt.insert_entry(ikey, rid);
+		cout<<"finish insert num:"<<i<<endl;
 	}
 	int32_t num = 10;
 	ikey->load(&num);

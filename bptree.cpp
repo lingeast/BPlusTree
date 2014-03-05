@@ -136,8 +136,9 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 			fhelp -> write_page(0,dir.page_block());
 			fhelp -> write_page(pg.page_id(),pg.page_block());
 			fhelp -> write_page(splitpg.page_id(),splitpg.page_block());
-
+			cout<<"Page split: Left is:"<<endl;
 			pg.print_leaf(key_itr);
+			cout<<"Page split: Right is:"<<endl;
 			splitpg.print_leaf(key_itr);
 			return newkey;
 		}
@@ -184,7 +185,9 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 					pg.insert(key,rid,key_itr);
 					key->load(tempkey);
 					free(tempkey);
+					cout<<"split at index: left is"<<endl;
 					pg.print_index(key_itr);
+					cout<<"split at index: right is"<<endl;
 					splitpg.print_index(key_itr);
 					fhelp ->write_page(0,dir.page_block());
 					fhelp ->write_page(pg.page_id(),pg.page_block());
@@ -201,7 +204,9 @@ bt_key* bp_tree::insert_to_page(page_node& pg, bt_key* key, RID rid) {
 						splitpg.end_offset() = pg.end_offset() - splitpos + sizeof(int16_t);
 						pg.end_offset() = splitpos;
 						pg.right_id() = splitpg.page_id();
+						cout<<"split at index: left is"<<endl;
 						pg.print_index(key_itr);
+						cout<<"split at index: right is"<<endl;
 						splitpg.print_index(key_itr);
 						fhelp ->write_page(0,dir.page_block());
 						fhelp ->write_page(pg.page_id(),pg.page_block());
