@@ -17,7 +17,7 @@ class rid: public BPlusTree::serializable {
 private:
 	int id;
 public:
-	size_t length(){return sizeof(id);}
+	size_t length() {return sizeof(id);}
 	void* data() const {return (void *)&id;}
 
 	// load from memory, serialzable_ptr->load(ptr_to_position);
