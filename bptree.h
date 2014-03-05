@@ -35,7 +35,7 @@ private:
 	dir_page dir;
 	bt_key* insert_to_page(page_node& pg, bt_key* key, RID rid);
 public:
-	bp_tree(const char *name, bt_key* itr);
+	bp_tree(const char *name);
 	~bp_tree();
 
 	void insert_entry(bt_key*, RID);

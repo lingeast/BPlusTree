@@ -14,7 +14,7 @@ using namespace std;
 
 namespace BPlusTree{
 
-bp_tree::bp_tree(const char *name, bt_key* itr) : fName(name), file(NULL), fhelp(NULL), key_itr(itr) {
+bp_tree::bp_tree(const char *name) : fName(name), file(NULL), fhelp(NULL), key_itr(NULL) {
 	file = fopen(name, "r+b");
 	if (file == NULL) {
 		// Creating new btree file
@@ -35,9 +35,13 @@ bp_tree::bp_tree(const char *name, bt_key* itr) : fName(name), file(NULL), fhelp
 bp_tree::~bp_tree() {
 	if (file != NULL) fclose(file);
 	if (fhelp != NULL) delete fhelp;
+	if (key_itr != NULL) delete key_itr;
 }
 
 int bp_tree::delete_entry(bt_key *key, RID rid) {
+	if (key_itr == NULL) {
+		key_itr = key->clone();
+	}
 	int ret = -1;
 	if (dir.root() < 1){
 		return -1;
@@ -63,6 +67,9 @@ int bp_tree::delete_entry(bt_key *key, RID rid) {
 }
 
 void bp_tree::insert_entry(bt_key *key, RID rid) {
+	if (key_itr == NULL) {
+		key_itr = key->clone();
+	}
 
 	if (dir.root() < 1) {
 		cout << "Init root node" << endl;

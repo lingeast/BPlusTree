@@ -38,6 +38,16 @@ public:
 	// release occupied resources
 	void close() {
 		if (file != NULL) fclose(file);
+
+		if (key_itr != NULL){
+			delete key_itr;
+			key_itr = NULL;
+		}
+
+		if (hi_key != NULL) {
+			delete hi_key;
+			hi_key = NULL;
+		}
 	}
 };
 

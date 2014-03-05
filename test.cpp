@@ -96,9 +96,9 @@ void test2() {
 	string bname("IntTestFile.bpt");
 
 	int_key* ikey = new int_key();
-	int_key* iitr = new int_key();
+	//int_key* iitr = new int_key();
 
-	bp_tree test_bpt(bname.c_str(), iitr);
+	bp_tree test_bpt(bname.c_str());
 	RID rid;
 	rid.slotNum = 0; rid.pageNum = 0;
 
@@ -120,7 +120,7 @@ void test2() {
 }
 
 void test3() {
-	cout << "########Test(3) scan begin" << endl;
+
 	int_key* lok = new int_key();
 	int_key* hik = new int_key();
 	int_key* itr = new int_key();
@@ -131,6 +131,7 @@ void test3() {
 	bpt_scan_itr scan_itr("IntTestFile.bpt", lok, hik, false, true);
 	char buffer[20];
 	RID rid;
+	cout << "########Test(3) scan begin" << endl;
 	while(scan_itr.get_next(rid, buffer) != -1) {
 		itr->load(buffer);
 		cout << itr->to_string() << ",";
@@ -144,6 +145,7 @@ int main() {
 	test1();
 	test2();
 	test3();
+	cout << "Bye B+ Tree" << endl;
 
 }
 
